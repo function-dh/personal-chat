@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="description" content="" />
+<title>채팅서비스</title>
+<link rel="stylesheet" href="css/chat.css" type="text/css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/4.0.1/placeholders.jquery.min.js"></script>
+</head>
+
+<body>
+<div id="wrap" class="wrap">
+	<div class="inner">
+		<!-- container -->
+		<div id="container" class="container">
+			<div class="content">
+				<!-- chat-wrap -->
+				<div class="chat-wrap">
+					<!-- tit-box -->
+					<div class="tit-box">
+						<h1 class="bi"><img src="img/bi-tit.png" alt="공인단기"></h1>
+						<h2 class="tit">무엇을 도와 드릴까요?</h2>
+					</div>
+					<!-- //tit-box -->
+					<!-- agree-box -->
+					<div class="agree-box txt-b">
+						<span class="icon-smile"></span>
+						<p class="txt">
+							본 서비스는 베타서비스로<br>
+							이 화면은 회원님을 포함한 특정인에게만 보여지며,<br>
+							예고 없이 서비스가 종료될 수 있습니다.<br>
+							서비스 개선을 목적으로 1:1 채팅 문의 내용은<br>
+							14개월 동안 보관합니다.
+						</p>
+						<strong class="emp-txt">
+							[동의합니다]를 클릭하시면<br>
+							1:1 채팅이 시작됩니다.
+						</strong>
+						<a href="#" class="agree-btn">동의합니다</a>
+					</div>
+					<!-- //agree-box -->
+					<!-- chat-box -->
+					<div class="chat-box">
+						<div class="chat-list">
+							<!-- 채팅 영역 -->
+							<ul class="speech-list">
+								<li class="fix-tit start">공인단기와 대화가 시작되었습니다</li>
+								<li class="user"><span class="bubble">사용자<span class="icon-speech"></span></span></li>
+								<li><span class="bubble">상대방<span class="icon-speech"></span></span></li>
+								<li class="fix-tit end">대화가 종료되었습니다.</li>
+								
+								<!-- 타이핑중 -->
+								<li class="typing user"><span class="typing-img bubble"><span class="icon-speech"></span></span></li>
+								<li class="typing"><span class="typing-img bubble"><span class="icon-speech"></span></span></li>
+								<!-- // 타이핑중 -->
+							</ul>
+							<!-- // 채팅 영역 -->
+						</div>
+						<div class="message-box clearfix">
+							<textarea class="message-frm" placeholder="메시지를 입력하세요."></textarea>
+							<label for="message-btn" class="skip">메시지 전송 버튼</label>
+							<input type="submit" id="message-btn" class="message-btn" value="전송">
+						</div>
+					</div>
+					<!-- chat-box -->
+				</div>
+				<!-- //chat-wrap -->
+			</div>
+		</div>
+		<!-- //container --> 
+	</div>
+</div>
+
+<script>
+	$(document).ready(function(){
+		/* agree-box */
+		$('.agree-btn').click(function(e){
+			$('.agree-box').hide()
+			$('.chat-box').show()
+			$('.wrap .inner').css({'min-height': 'initial'})
+			e.preventDefault();
+		})
+
+		/* speech-list */
+		function newMessage(message, key){
+			var messageList = {
+				user: '<li class="user"><span class="bubble">'+message+'<span class="icon-speech"></span></span></li>',
+				userTyping : '<li class="typing user"><span class="typing-img bubble"><span class="icon-speech"></span></span></li>',
+			}
+			$('.speech-list').append(messageList[key])
+		}
+
+		$('.message-btn').each(function(){
+			$(this).click(function(){
+				var message = $(this).siblings('.message-frm')
+				var remessage = message.val().replace(/\s/gi, "")
+	
+				$('.speech-list').find('.typing.user').remove()
+				if(remessage !== ''){
+					newMessage(message.val(), 'user')
+				}else{
+					alert('내용을 입력해주세요!');
+				}
+				message.val('')
+				message.focus()
+			})
+		})
+
+		$('.message-frm').each(function(){
+			$(this).focus(function(){
+				$('.chat-list').scrollTop($('.chat-list')[0].scrollHeight);
+				newMessage('', 'userTyping')
+			})
+
+			$(this).blur(function(){
+				$('.speech-list').find('.typing.user').remove()
+			})
+		}) 
+	})
+</script>
+
+</body>
+</html>
